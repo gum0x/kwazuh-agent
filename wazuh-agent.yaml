@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  labels:
+    app: wazuh-agent
+    role: security
+  name: wazuh-agent
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: wazuh-agent
+      role: security
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: wazuh-agent
+        role: security
+    spec:
+      containers:
+      - env:
+        - name: MANAGER_IP
+          value: 10.128.0.2
+        image: gcr.io/k8sec-215018/wazuh-agent:0.1
+        imagePullPolicy: Always
+        name: wazuh-agent
+        resources: {}
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /host
+          name: hostfs
+          readOnly: true
+      hostNetwork: true
+      hostPID: true
+      hostIPC: true
+      restartPolicy: Always
+      securityContext: {}
+      volumes:
+      - hostPath:
+          path: /
+          type: ""
+        name: hostfs
