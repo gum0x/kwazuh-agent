@@ -1,0 +1,1 @@
+# kwazuh-agent
